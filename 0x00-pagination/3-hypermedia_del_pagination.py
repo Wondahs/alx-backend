@@ -43,25 +43,25 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
-            '''Hyper index function'''
-            db = []
-            db_index = self.indexed_dataset()
-            assert type(index) is int and index >= 0
-            assert index < len(db_index)
-            assert type(page_size) is int
-            start, end = index_range(index, page_size)
+        '''Hyper index function'''
+        db = []
+        db_index = self.indexed_dataset()
+        assert type(index) is int and index >= 0
+        assert index < len(db_index)
+        assert type(page_size) is int
+        start, end = index_range(index, page_size)
 
-            next_index = page_size + index
-            for i in range(start, end):
-                if db_index[i]:
-                    db.append(self.indexed_dataset().get(i))
-                else:
-                    next_index += 1
+        next_index = page_size + index
+        for i in range(start, end):
+            if db_index[i]:
+                db.append(self.indexed_dataset().get(i))
+            else:
+                next_index += 1
 
-            hyper_dict = {
-                    'index': index,
-                    'data': db,
-                    'page_size': page_size,
-                    'next_index': next_index
-                    }
-            return hyper_dict
+        hyper_dict = {
+                'index': index,
+                'data': db,
+                'page_size': page_size,
+                'next_index': next_index
+                }
+        return hyper_dict
