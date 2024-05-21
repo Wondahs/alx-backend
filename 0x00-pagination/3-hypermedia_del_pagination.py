@@ -63,5 +63,5 @@ class Server:
                 'data': db,
                 'page_size': page_size,
                 'next_index': next_index
-                }
+        }
         return hyper_dict
