@@ -6,35 +6,36 @@ import time
 
 class LFUCache(BaseCaching):
     '''LFUCache Caching System'''
-    __d_count = {}
-    __d_time = {}
+
+    def __init__(self):
+        '''Init method'''
+        super().__init__()
+        self._d_count = {}
+        self._d_time = {}
     def put(self, key, item):
         '''assigns to the dictionary self.cache_data the item value for the key key'''
         if not key or not item:
             return
+        if key in self.cache_data.keys():
+            self._d_count[key] += 1
+        else:
+            self._d_count[key] = 1
+        self._d_time[key] = time.time()
         self.cache_data[key] = item
-        LFUCache.__d_count[key] = 0
-        LFUCache.__d_time[key] = time.time()
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            min_val = min(list(LFUCache.__d_count.values()))
-            min_list = []
-            minkey = None
-            for k, v in LFUCache.__d_count.items():
-                if k is not key and v == min_val:
-                    minkey = k
-                    min_list.append(k)
-            if len(min_list) > 0:
-                now = time.time()
-                diff = 0
-                for k, v in LFUCache.__d_time.items():
-                    t_diff = now - v
-                    if k is not key and t_diff > diff:
-                        minkey = k
-                        diff = t_diff
+            min_val = min(list(self._d_count.values()))
+            min_list = [k for k, v in self._d_count.items() if v == min_val]
+            minkey = min_list[0]
+            print(minkey)
+            if len(min_list) > 1:
+                min_time = [v for k, v in self._d_time.items() if k is not key]
+                min_list = [k for k, v in self._d_time.items() if v == min(min_time)]
+                minkey = min_list[0]
+                print(minkey)
 
             del self.cache_data[minkey]
-            del LFUCache.__d_count[minkey]
-            del LFUCache.__d_time[minkey]
+            del self._d_count[minkey]
+            del self._d_time[minkey]
             print(f"DISCARD: {minkey}")
 
     def get(self, key):
@@ -42,6 +43,6 @@ class LFUCache(BaseCaching):
         if key:
             if key not in self.cache_data.keys():
                 return
-            LFUCache.__d_count[key] += 1
-            LFUCache.__d_time[key] = time.time()
+            self._d_count[key] += 1
+            self._d_time[key] = time.time()
             return self.cache_data[key]
