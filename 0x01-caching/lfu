@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+'''LRUCache Caching System'''
+from base_caching import BaseCaching
+
+
+class LRUCache(BaseCaching):
+    '''LRUCache Caching System'''
+    __d_count = {}
+    def put(self, key, item):
+        '''assigns to the dictionary self.cache_data the item value for the key key'''
+        if not key or not item:
+            return
+        self.cache_data[key] = item
+        LRUCache.__d_count[key] = 0
+        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+            min = float('inf')
+            minkey = None
+            for k, v in LRUCache.__d_count.items():
+                if k is not key and v < min:
+                    min = v
+                    minkey = k
+            if minkey:
+                del self.cache_data[minkey]
+                del LRUCache.__d_count[minkey]
+            print(f"DISCARD: {minkey}")
+
+    def get(self, key):
+        ''' returns the value in self.cache_data linked to key.'''
+        if key:
+            if key not in self.cache_data.keys():
+                return
+            LRUCache.__d_count[key] += 1
+            return self.cache_data[key]
