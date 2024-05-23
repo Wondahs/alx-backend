@@ -6,7 +6,7 @@ import time
 
 class LIFOCache(BaseCaching):
     '''LIFOCache Caching System'''
-    
+
     def __init__(self):
         super().__init__()
         self.d_time = {}
@@ -19,7 +19,8 @@ class LIFOCache(BaseCaching):
         self.cache_data[key] = item
         self.d_time[key] = time.time()
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            max_time = max(list(v for k, v in self.d_time.items() if k is not key))
+            max_time = max(list(v for k, v
+                                in self.d_time.items() if k is not key))
             lasts = [k for k, v in self.d_time.items() if v == max_time]
             last_key = lasts[0]
             self.cache_data.pop(last_key)
