@@ -1,11 +1,15 @@
 #!/usr/bin/python3
 '''LIFOCache Caching System'''
 from base_caching import BaseCaching
+import time
 
 
 class LIFOCache(BaseCaching):
     '''LIFOCache Caching System'''
-    __d_count = -2
+    
+    def __init__(self):
+        super().__init__()
+        self.d_time = {}
 
     def put(self, key, item):
         '''assigns to the dictionary self.cache_data
@@ -13,14 +17,13 @@ class LIFOCache(BaseCaching):
         if not key or not item:
             return
         self.cache_data[key] = item
+        self.d_time[key] = time.time()
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            keys = list(self.cache_data.keys())
-            last_key = keys[LIFOCache.__d_count]
+            max_time = max(list(v for k, v in self.d_time.items() if k is not key))
+            lasts = [k for k, v in self.d_time.items() if v == max_time]
+            last_key = lasts[0]
             self.cache_data.pop(last_key)
             print(f"DISCARD: {last_key}")
-            LIFOCache.__d_count -= 1
-            if LIFOCache.__d_count == -4:
-                LIFOCache.__d_count = -2
 
     def get(self, key):
         ''' returns the value in self.cache_data linked to key.'''
