@@ -6,8 +6,10 @@ from base_caching import BaseCaching
 class LIFOCache(BaseCaching):
     '''LIFOCache Caching System'''
     __d_count = -2
+
     def put(self, key, item):
-        '''assigns to the dictionary self.cache_data the item value for the key key'''
+        '''assigns to the dictionary self.cache_data
+        the item value for the key key'''
         if not key or not item:
             return
         self.cache_data[key] = item

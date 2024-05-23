@@ -12,8 +12,10 @@ class LFUCache(BaseCaching):
         super().__init__()
         self._d_count = {}
         self._d_time = {}
+
     def put(self, key, item):
-        '''assigns to the dictionary self.cache_data the item value for the key key'''
+        '''assigns to the dictionary self.cache_data
+        the item value for the key key'''
         if not key or not item:
             return
         if key in self.cache_data.keys():
@@ -24,12 +26,15 @@ class LFUCache(BaseCaching):
         self.cache_data[key] = item
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
             min_val = min(list(self._d_count.values()))
-            min_list = [k for k, v in self._d_count.items() if v == min_val]
+            min_list = [k for k, v in
+                        self._d_count.items() if v == min_val]
             minkey = min_list[0]
             print(minkey)
             if len(min_list) > 1:
-                min_time = [v for k, v in self._d_time.items() if k is not key]
-                min_list = [k for k, v in self._d_time.items() if v == min(min_time)]
+                min_time = [v for k, v in
+                            self._d_time.items() if k is not key]
+                min_list = [k for k, v in
+                            self._d_time.items() if v == min(min_time)]
                 minkey = min_list[0]
                 print(minkey)
 

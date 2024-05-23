@@ -6,7 +6,8 @@ from base_caching import BaseCaching
 class FIFOCache(BaseCaching):
     '''FIFOCache Caching System'''
     def put(self, key, item):
-        '''assigns to the dictionary self.cache_data the item value for the key key'''
+        '''assigns to the dictionary self.cache_data the
+        item value for the key key'''
         if not key or not item:
             return
         self.cache_data[key] = item
