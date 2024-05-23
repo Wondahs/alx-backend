@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''LFUCache Caching System'''
 from base_caching import BaseCaching
-import time
+from datetime import datetime
 
 
 class LFUCache(BaseCaching):
@@ -22,21 +22,23 @@ class LFUCache(BaseCaching):
             self._d_count[key] += 1
         else:
             self._d_count[key] = 1
-        self._d_time[key] = time.time()
+        self._d_time[key] = datetime.now()
         self.cache_data[key] = item
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            min_val = min(list(self._d_count.values()))
+            # print(self._d_count)
+            min_val = min(list(v for k, v in
+                               self._d_count.items() if k is not key))
             min_list = [k for k, v in
                         self._d_count.items() if v == min_val]
             minkey = min_list[0]
-            print(minkey)
+            # print(min_list)
             if len(min_list) > 1:
                 min_time = [v for k, v in
-                            self._d_time.items() if k is not key]
+                            self._d_time.items() if k in min_list]
                 min_list = [k for k, v in
                             self._d_time.items() if v == min(min_time)]
                 minkey = min_list[0]
-                print(minkey)
+                # print(minkey)
 
             del self.cache_data[minkey]
             del self._d_count[minkey]
@@ -49,5 +51,5 @@ class LFUCache(BaseCaching):
             if key not in self.cache_data.keys():
                 return
             self._d_count[key] += 1
-            self._d_time[key] = time.time()
+            self._d_time[key] = datetime.now()
             return self.cache_data[key]
